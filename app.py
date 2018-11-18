@@ -88,7 +88,9 @@ def define_topic():
 
 texts = [
     'planetary_system_ru.txt',
-    'planetary_system_en.txt'
+    'planetary_system_en.txt',
+    'moon_ru.txt',
+    'moon_en.txt'
 ]
 
 
