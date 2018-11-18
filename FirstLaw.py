@@ -38,7 +38,7 @@ class FirstLaw:
 
     def save_rank_info(self):
         ranks_count = len(self.sorted_frequencies)
-        print(">> The 1'st Zipf Law <<")
+        print("\n>> The 1'st Zipf Law <<")
         print("n={}".format(self.words_total))
         for x in range(ranks_count):
             new_rank = RankInfo(self.sorted_counts[x], self.sorted_frequencies[x], x + 1)

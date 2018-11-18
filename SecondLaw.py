@@ -63,7 +63,7 @@ class SecondLaw:
 
     def save_rank_info(self):
         ranks_count = len(self.sorted_frequencies)
-        print(">> The 2'nd Zipf Law <<")
+        print("\n>> The 2'nd Zipf Law <<")
         for x in range(ranks_count):
             new_rank = RankInfo(self.sorted_counts[x], self.sorted_frequencies[x], x + 1)
             new_rank.set_words(self.get_words_by_frequency(new_rank.get_count()))

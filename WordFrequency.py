@@ -3,6 +3,8 @@ class WordFrequency:
         self.word = word
         self.total = total
         self.count = 1
+        self.weight = None
+        self.inverse_frequency = None
 
     def is_for_word(self, word):
         return self.word == word
@@ -12,6 +14,12 @@ class WordFrequency:
 
     def add(self):
         self.count = self.count + 1
+
+    def set_weight(self, inverse_frequency):
+        self.weight = self.get_frequency() * inverse_frequency
+
+    def set_inverse_frequency(self, inverse_frequency):
+        self.inverse_frequency = inverse_frequency
 
     def get_frequency(self):
         return self.count / self.total
