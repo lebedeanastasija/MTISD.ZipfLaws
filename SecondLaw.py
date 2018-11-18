@@ -3,12 +3,20 @@ from WordFrequency import WordFrequency
 from RankInfo import RankInfo
 
 
-class FirstLaw:
+class SecondLaw:
 
-    def __init__(self, text):
+    def __init__(self, text,  l_rank, h_rank):
         words = TextHelper.get_words(text)
-        self.filtered_words = words
+        # print("All words:")
+        # print(words)
+
+        self.filtered_words = TextHelper.filter_words(words)
+        # print("Filtered words:")
+        # print(self.filtered_words)
+
         self.words_total = len(self.filtered_words)
+        self.low_rank = l_rank
+        self.high_rank = h_rank
         self.sorted_counts = []
         self.sorted_frequencies = []
         self.word_frequencies = []
@@ -18,6 +26,16 @@ class FirstLaw:
         self.calc_frequencies()
         self.sort_frequencies()
         self.save_rank_info()
+        key_words = []
+
+        print("Max rank: {}".format(len(self.sorted_frequencies)))
+        print("Process rank: {}-{}".format(self.low_rank, self.high_rank))
+
+        for x in range(self.low_rank, self.high_rank + 1):
+            for rank_word in self.rank_info[x - 1].words:
+                key_words.append(rank_word)
+
+        print("Key words: {}".format(', '.join(key_words)))
 
     def calc_frequencies(self):
         for word in self.filtered_words:
@@ -27,6 +45,13 @@ class FirstLaw:
                 self.word_frequencies.append(frequency)
             else:
                 frequency.add()
+
+    def get_word_frequency(self, word):
+        word_frequency = None
+        for freq in self.word_frequencies:
+            if freq.is_for_word(word):
+                word_frequency = freq
+        return word_frequency
 
     def sort_frequencies(self):
         for freq in self.word_frequencies:
@@ -38,23 +63,14 @@ class FirstLaw:
 
     def save_rank_info(self):
         ranks_count = len(self.sorted_frequencies)
-        print(">> The 1'st Zipf Law <<")
-        print("n={}".format(self.words_total))
+        print(">> The 2'nd Zipf Law <<")
         for x in range(ranks_count):
             new_rank = RankInfo(self.sorted_counts[x], self.sorted_frequencies[x], x + 1)
             new_rank.set_words(self.get_words_by_frequency(new_rank.get_count()))
             self.rank_info.append(new_rank)
-            print("[{}] n_i={}, p_i={}, r={}, C={}, {} words: {}".format(
-                x, new_rank.count, new_rank.frequency, new_rank.rank, new_rank.get_c(), len(new_rank.words),
-                ', '.join(new_rank.words)
+            print("[{}] p_i={}, r={}, words number: {}".format(
+                x, new_rank.frequency, new_rank.rank, len(new_rank.words)
             ))
-
-    def get_word_frequency(self, word):
-        word_frequency = None
-        for freq in self.word_frequencies:
-            if freq.is_for_word(word):
-                word_frequency = freq
-        return word_frequency
 
     def get_words_by_frequency(self, count):
         words_info = list(filter(lambda x: x.has_count(count), self.word_frequencies))
@@ -64,8 +80,8 @@ class FirstLaw:
         x_vector = []
         y_vector = []
         for item in self.rank_info:
-            x_vector.append(item.rank)
-            y_vector.append(item.frequency)
+            x_vector.append(item.frequency)
+            y_vector.append(len(item.words))
         return [
             x_vector,
             y_vector

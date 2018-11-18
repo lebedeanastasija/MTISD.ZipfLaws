@@ -65,11 +65,13 @@ def find_key_words():
         first_law.calc_parameters()
         info = first_law.get_graph_info()
         draw_graphic(info[0], info[1])
+        first_law = None
 
         second_low = SecondLaw(file_text, 3, 7)
         second_low.calc_parameters()
         info = second_low.get_graph_info()
         draw_graphic(info[0], info[1])
+        second_low = None
 
 
 def define_topic():
@@ -85,7 +87,8 @@ def define_topic():
 
 
 texts = [
-    'planetary_system_ru.txt'
+    'planetary_system_ru.txt',
+    'planetary_system_en.txt'
 ]
 
 
