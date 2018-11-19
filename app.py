@@ -5,6 +5,7 @@ from matplotlib import pyplot
 from FirstLaw import FirstLaw
 from SecondLaw import SecondLaw
 from WeightsMethod import WeightsMethod
+from SearchSystem import SearchSystem
 
 
 def display_title_bar():
@@ -20,8 +21,8 @@ def quit():
 
 
 def get_user_choice():
-    print("\n[1] Define article key words.")
-    print("[2] Define if article refers to the selected topic.")
+    print("[1] Define article key words.")
+    print("[2] Search article by query.")
     print("[q] Quit.")
 
     return input("What would you like to do? ")
@@ -38,13 +39,15 @@ def show_available_articles():
 
 
 def show_available_topics():
-    print("\nSelect one of the following topics:")
+    print("\nSearch text article for one of the following topics:")
     i = 0
     for topic in topics:
         i += 1
         print("[" + str(i) + "] " + topic)
-    print("[m] Menu")
-    return input("Your choice: ")
+
+
+def show_enter_search_query():
+    return input("\nEnter search query (one or more words): ")
 
 
 def draw_graphic(x_vector, y_vector):
@@ -75,7 +78,7 @@ def find_key_words():
         info = first_law.get_graph_info()
         draw_graphic(info[0], info[1])
 
-        second_low = SecondLaw(file_text, 3, 7)
+        second_low = SecondLaw(file_text, 3, 6)
         second_low.calc_parameters()
         info = second_low.get_graph_info()
         draw_graphic(info[0], info[1])
@@ -92,23 +95,24 @@ def find_key_words():
         print(weights_method.get_key_words())
 
 
-def define_topic():
-    article = show_available_articles()
-    if article == 'm':
+def search_article():
+    show_available_topics()
+
+    query = show_enter_search_query()
+    if query == 'm':
         display_title_bar()
     else:
-        topic = show_available_topics()
-        if topic == 'm':
-            display_title_bar()
-        else:
-            print('\nHere we will define article topic!\n')
+        search_system = SearchSystem(query)
+        text = search_system.search_article()
 
 
 texts = [
-    'planetary_system_ru.txt',
-    'planetary_system_en.txt',
+    'moon_en.txt',
     'moon_ru.txt',
-    'moon_en.txt'
+    'gymnastics_en.txt',
+    'gymnastics_ru.txt',
+    'female_nutrition_en.txt',
+    'female_nutrition_ru.txt'
 ]
 
 
@@ -119,6 +123,7 @@ topics = [
 ]
 
 diff_texts_path = '.\data\diff_texts\\'
+topic_texts_path = '.\data'
 
 
 def main():
@@ -136,7 +141,7 @@ def main():
             find_key_words()
 
         elif choice == '2':
-            define_topic()
+            search_article()
 
         elif choice == 'q':
             quit()

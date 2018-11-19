@@ -1,16 +1,26 @@
 import re
 
 ru_filter = [
-    "без", "вне", "для", "изо", "меж", "над", "обо", "ото", "под", "при", "про",  # предлоги
-    "она", "оно", "они", "мой", "ваш", "наш", "его", "кто", "что", "чей", "где", "тот", "сей", "сам",  # местоимения
-    "как", "так", "еще", "все", "ибо", "или", "тем", "чем", "тех"  # другие служебные слова
+    "без", "вне", "для", "изо", "меж", "над", "обо", "ото", "под", "при", "про",
+    "она", "оно", "они",
+    "мой", "ваш", "наш", "его", "тот", "сей",
+    "сам", "свой", "сама", "сами", "само", "себя",
+    "это", "вот", "тут", "той", "эти", "этот", "который", "которая", "которое", "которые", "которых", "которому", "тому",
+    "много", "немного", "мало", "каждый", "каждой", "больше", "меньше",
+    "когда", "кто", "что", "чей", "где",
+    "как", "так", "еще", "все", "ибо", "или", "тем", "чем", "тех",
+    "снова", "опять", "часто", "редко", "после",
+    "однако", "очевидно", "также", "чтобы",
+    "был", "была", "было", "были", "будет", "будут", "стал", "стала", "стало", "стали"
 ]
 
 en_filter = [
-    "the", "for", "and", "that", "this", "are",
-    "how", "who", "where", "what", "whose",
-    "some", "any", "not",
-    "you", "your", "yours", "she", "her", "his"
+    "the", "for", "and", "but", "with", "about", "from",
+    "that", "this", "here",
+    "how", "who", "where", "what", "whose", "why", "which",
+    "some", "same", "any", "not", "more", "less", "only", "just", "also", "all", "one", "everything", "nothing", "many", "very",
+    "you", "your", "yours", "she", "her", "his", "our", "they", "their", "its", "them",
+    "should", "must", "would", "have", "has", "had", "will", "are", "were", "was", "can", "cannot", "could", "lets"
 ]
 
 
@@ -18,7 +28,7 @@ def get_words(text_string):
     row_lines = text_string.splitlines()
 
     lines = list(filter(lambda l: len(l) > 0, row_lines))
-    lines = list(map(lambda l: re.sub("[,.!?0-9:;=&^%$#@*+{}()[\]«»]", "", l), lines))
+    lines = list(map(lambda l: re.sub("[,.!?0-9:;=&^%$#@*+’'{}()[\]«»“”°×]", "", l), lines))
     lines = list(map(lambda l: re.sub("^(\s+)", "", l), lines))
     lines = list(map(lambda l: re.sub("(\s+)$", "", l), lines))
     lines = list(map(lambda l: re.sub("-", " ", l), lines))
