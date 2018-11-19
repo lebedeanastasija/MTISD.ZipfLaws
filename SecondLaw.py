@@ -5,7 +5,7 @@ from RankInfo import RankInfo
 
 class SecondLaw:
 
-    def __init__(self, text,  l_rank, h_rank):
+    def __init__(self, text):
         words = TextHelper.get_words(text)
         # print("All words:")
         # print(words)
@@ -15,27 +15,28 @@ class SecondLaw:
         # print(self.filtered_words)
 
         self.words_total = len(self.filtered_words)
-        self.low_rank = l_rank
-        self.high_rank = h_rank
+        self.low_rank = None
+        self.high_rank = None
         self.sorted_counts = []
         self.sorted_frequencies = []
         self.word_frequencies = []
         self.rank_info = []
+        self.key_words = []
 
     def calc_parameters(self):
         self.calc_frequencies()
         self.sort_frequencies()
         self.save_rank_info()
-        key_words = []
 
         print("Max rank: {}".format(len(self.sorted_frequencies)))
+        self.define_rank_range()
         print("Process rank: {}-{}".format(self.low_rank, self.high_rank))
 
-        for x in range(self.low_rank, self.high_rank + 1):
-            for rank_word in self.rank_info[x - 1].words:
-                key_words.append(rank_word)
+        for x in range(self.low_rank, self.high_rank):
+            for rank_word in self.rank_info[x].words:
+                self.key_words.append(rank_word)
 
-        print("Key words: {}".format(', '.join(key_words)))
+        print("Key words: {}".format(', '.join(self.key_words)))
 
     def calc_frequencies(self):
         for word in self.filtered_words:
@@ -86,3 +87,26 @@ class SecondLaw:
             x_vector,
             y_vector
         ]
+
+    def define_rank_range(self):
+        ranks_number = len(self.sorted_frequencies)
+        if ranks_number == 1:
+            self.low_rank = 0
+            self.high_rank = 1
+
+        elif ranks_number == 2:
+            self.low_rank = 0
+            self.high_rank = 2
+
+        elif ranks_number == 3:
+            self.low_rank = 1
+            self.high_rank = 2
+
+        elif ranks_number == 4:
+            self.low_rank = 1
+            self.high_rank = 3
+
+        else:
+            self.low_rank = 2
+            self.high_rank = 4
+

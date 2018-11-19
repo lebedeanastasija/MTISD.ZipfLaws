@@ -2,6 +2,7 @@ import os
 import codecs
 from matplotlib import pyplot
 
+import TextHelper
 from FirstLaw import FirstLaw
 from SecondLaw import SecondLaw
 from WeightsMethod import WeightsMethod
@@ -31,7 +32,7 @@ def get_user_choice():
 def show_available_articles():
     print("\nSelect one of the following Articles:")
     i = 0
-    for text in texts:
+    for text in diff_articles:
         i += 1
         print("[" + str(i) + "] " + text)
     print("[m] Menu")
@@ -55,42 +56,27 @@ def draw_graphic(x_vector, y_vector):
     pyplot.show()
 
 
-def get_file_text(path):
-    file_obj = codecs.open(path, "r", "utf_8_sig")
-    file_text = file_obj.read()
-    file_obj.close()
-    return file_text
-
-
 def find_key_words():
     article = show_available_articles()
     if article == 'm':
         display_title_bar()
     else:
-        file_path = diff_texts_path + texts[int(article)-1]
+        file_path = diff_articles[int(article)-1]
         print("File path: " + file_path)
-        file_obj = codecs.open(file_path, "r", "utf_8_sig")
-        file_text = file_obj.read()
-        file_obj.close()
+        file_text = TextHelper.get_text(file_path)
 
         first_law = FirstLaw(file_text)
         first_law.calc_parameters()
         info = first_law.get_graph_info()
         draw_graphic(info[0], info[1])
 
-        second_low = SecondLaw(file_text, 3, 6)
+        second_low = SecondLaw(file_text)
         second_low.calc_parameters()
         info = second_low.get_graph_info()
         draw_graphic(info[0], info[1])
 
         print('\n>> Weights Method <<')
-        print("Analyzing files: ")
-        directory_texts = []
-        for text_path in texts:
-            file_path = diff_texts_path + text_path
-            print(file_path)
-            directory_texts.append(get_file_text(file_path))
-
+        directory_texts = TextHelper.get_texts(diff_articles)
         weights_method = WeightsMethod(directory_texts, 1)
         print(weights_method.get_key_words())
 
@@ -102,17 +88,38 @@ def search_article():
     if query == 'm':
         display_title_bar()
     else:
-        search_system = SearchSystem(query)
+        search_system = SearchSystem(query, topic_articles)
         text = search_system.search_article()
 
 
-texts = [
-    'moon_en.txt',
-    'moon_ru.txt',
-    'gymnastics_en.txt',
-    'gymnastics_ru.txt',
-    'female_nutrition_en.txt',
-    'female_nutrition_ru.txt'
+diff_articles = [
+    '.\data\diff_texts\\moon_en.txt',
+    '.\data\diff_texts\\moon_ru.txt',
+    '.\data\diff_texts\\gymnastics_en.txt',
+    '.\data\diff_texts\\gymnastics_ru.txt',
+    '.\data\diff_texts\\female_nutrition_en.txt',
+    '.\data\diff_texts\\female_nutrition_ru.txt'
+]
+
+topic_articles = [
+    '.\data\\astronomy\\en\\mars.txt',
+    '.\data\\astronomy\\ru\\mars.txt',
+    '.\data\\astronomy\\en\\moon.txt',
+    '.\data\\astronomy\\ru\\moon.txt',
+    '.\data\\astronomy\\en\\planetary_system.txt',
+    '.\data\\astronomy\\ru\\planetary_system.txt',
+
+    '.\data\\healthy_lifestyle\\en\\female_nutrition.txt',
+    '.\data\\healthy_lifestyle\\ru\\female_nutrition.txt',
+    '.\data\\healthy_lifestyle\\en\\office_physical_culture.txt',
+    '.\data\\healthy_lifestyle\\ru\\office_physical_culture.txt',
+
+    '.\data\\olympic_games\\en\\gymnastics.txt',
+    '.\data\\olympic_games\\ru\\gymnastics.txt',
+    '.\data\\olympic_games\\en\\modern_olympic_games.txt',
+    '.\data\\olympic_games\\ru\\modern_olympic_games.txt',
+    '.\data\\olympic_games\\en\\table_tennis.txt',
+    '.\data\\olympic_games\\ru\\table_tennis.txt'
 ]
 
 
@@ -123,15 +130,11 @@ topics = [
 ]
 
 diff_texts_path = '.\data\diff_texts\\'
-topic_texts_path = '.\data'
 
 
 def main():
-    # draw_graphic([x for x in range(10)])
 
     choice = ''
-    article = ''
-    topic = ''
 
     while choice != 'q':
         display_title_bar()

@@ -1,3 +1,4 @@
+import codecs
 import re
 
 ru_filter = [
@@ -46,4 +47,18 @@ def filter_words(words):
     words = list(filter(lambda x: x not in ru_filter, words))
     words = list(filter(lambda x: x not in en_filter, words))
     return words
+
+
+def get_texts(files):
+    texts = []
+    for file in files:
+        texts.append(get_text(file))
+    return texts
+
+
+def get_text(file):
+    file_obj = codecs.open(file, "r", "utf_8_sig")
+    file_text = file_obj.read()
+    file_obj.close()
+    return file_text
 
