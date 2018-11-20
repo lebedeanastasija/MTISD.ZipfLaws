@@ -35,7 +35,7 @@ class SearchSystem:
     def get_query_key_words(self):
         second_law = SecondLaw(self.query)
         second_law.calc_parameters()
-        self.query_key_words = second_law.key_words
+        self.query_key_words = second_law.get_key_words()
 
     def get_articles_key_words(self):
         print("Analyzing files: ")

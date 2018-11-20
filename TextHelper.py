@@ -17,11 +17,11 @@ ru_filter = [
 
 en_filter = [
     "the", "for", "and", "but", "with", "about", "from",
-    "that", "this", "here",
+    "that", "this", "here", "there",
     "how", "who", "where", "what", "whose", "why", "which",
     "some", "same", "any", "not", "more", "less", "only", "just", "also", "all", "one", "everything", "nothing", "many", "very",
     "you", "your", "yours", "she", "her", "his", "our", "they", "their", "its", "them",
-    "should", "must", "would", "have", "has", "had", "will", "are", "were", "was", "can", "cannot", "could", "lets"
+    "should", "must", "would", "have", "has", "had","need", "needs", "will", "are", "were", "was", "can", "may", "might", "cannot", "could", "lets"
 ]
 
 

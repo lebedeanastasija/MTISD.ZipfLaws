@@ -3,6 +3,10 @@ from WordFrequency import WordFrequency
 from RankInfo import RankInfo
 
 
+def get_middle_index(items_number):
+    return (items_number-1)//2
+
+
 class SecondLaw:
 
     def __init__(self, text):
@@ -109,4 +113,15 @@ class SecondLaw:
         else:
             self.low_rank = 2
             self.high_rank = 4
+
+            middle_i = get_middle_index(ranks_number)
+            self.low_rank = middle_i - 2
+            if self.low_rank < 0:
+                self.low_rank = 0
+            self.high_rank = middle_i + 2
+            if self.high_rank > ranks_number:
+                self.high_rank = ranks_number
+
+    def get_key_words(self):
+        return self.key_words
 
