@@ -25,12 +25,13 @@ class SearchSystem:
         self.get_query_key_words()
         self.get_articles_key_words()
 
-        print("SEARCH RESULT:")
-        print("query key words >>")
-        print(self.query_key_words)
-        print("articles key words >>")
-        for items in self.articles_key_words:
-            print(items)
+        article_index = self.find_proper_article()
+        article_name = self.article_names[article_index]
+        article_key_words = self.articles_key_words[article_index]
+
+        print('Result article: {}'.format(article_name))
+        print("query key words: {}".format(', '.join(self.query_key_words)))
+        print("articles key words: {}".format(', '.join(article_key_words)))
 
     def get_query_key_words(self):
         second_law = SecondLaw(self.query)
@@ -42,7 +43,25 @@ class SearchSystem:
         self.article_texts = TextHelper.get_texts(self.article_names)
 
         weights_method = WeightsMethod(self.article_texts, 1)
-        self.articles_key_words = weights_method.get_key_words()
+        self.articles_key_words = weights_method.get_key_words(False)
 
+    def find_proper_article(self):
+        articles_fitness = []
+        articles_total = len(self.article_names)
+        article_index = 0
+
+        for x in range(articles_total):
+            fitness = 0
+
+            for word in self.articles_key_words[x]:
+                if word in self.query_key_words:
+                    fitness = fitness + 1
+            articles_fitness.append(fitness)
+
+            if x != 0:
+                if fitness > articles_fitness[article_index]:
+                    article_index = x
+
+        return article_index
 
 

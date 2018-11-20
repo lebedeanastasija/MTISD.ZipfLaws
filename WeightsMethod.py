@@ -20,7 +20,7 @@ class WeightsMethod:
         for x in range(self.texts_total):
             self.word_frequencies_matrix.append([])
 
-    def get_key_words(self):
+    def get_key_words(self, print_weights):
         self.calc_inverse_frequencies()
         self.calc_texts_frequencies()
         self.calc_word_weights()
@@ -29,13 +29,15 @@ class WeightsMethod:
         key_words = []
 
         for x in range(len(self.word_frequencies_matrix)):
-            print("==== Text #{} key words".format(x))
+            if print_weights:
+                print("==== Text #{} key words".format(x+1))
             key_words.append([])
             text_frequencies = self.word_frequencies_matrix[x]
             for freq in text_frequencies:
                 if freq.weight >= self.low_weight:
                     key_words[x].append(freq.word)
-                    print('[{}] k_i={}'.format(freq.word, freq.weight))
+                    if print_weights:
+                        print('[{}] k_i={}'.format(freq.word, freq.weight))
 
         return key_words
 

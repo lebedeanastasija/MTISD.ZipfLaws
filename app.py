@@ -9,96 +9,15 @@ from WeightsMethod import WeightsMethod
 from SearchSystem import SearchSystem
 
 
-def display_title_bar():
-    os.system('cls')
-
-    print("\n**********************************************")
-    print("***************** Zipf Laws ******************")
-    print("**********************************************")
-
-
-def quit():
-    print("\nThanks for your work!")
-
-
-def get_user_choice():
-    print("[1] Define article key words.")
-    print("[2] Search article by query.")
-    print("[q] Quit.")
-
-    return input("What would you like to do? ")
-
-
-def show_available_articles():
-    print("\nSelect one of the following Articles:")
-    i = 0
-    for text in diff_articles:
-        i += 1
-        print("[" + str(i) + "] " + text)
-    print("[m] Menu")
-    return input("Your choice: ")
-
-
-def show_available_topics():
-    print("\nSearch text article for one of the following topics:")
-    i = 0
-    for topic in topics:
-        i += 1
-        print("[" + str(i) + "] " + topic)
-
-
-def show_enter_search_query():
-    return input("\nEnter search query (one or more words): ")
-
-
-def draw_graphic(x_vector, y_vector):
-    pyplot.plot(x_vector, y_vector)
-    pyplot.show()
-
-
-def find_key_words():
-    article = show_available_articles()
-    if article == 'm':
-        display_title_bar()
-    else:
-        file_path = diff_articles[int(article)-1]
-        print("File path: " + file_path)
-        file_text = TextHelper.get_text(file_path)
-
-        first_law = FirstLaw(file_text)
-        first_law.calc_parameters()
-        info = first_law.get_graph_info()
-        draw_graphic(info[0], info[1])
-
-        second_low = SecondLaw(file_text)
-        second_low.calc_parameters()
-        info = second_low.get_graph_info()
-        draw_graphic(info[0], info[1])
-
-        print('\n>> Weights Method <<')
-        directory_texts = TextHelper.get_texts(diff_articles)
-        weights_method = WeightsMethod(directory_texts, 1)
-        print(weights_method.get_key_words())
-
-
-def search_article():
-    show_available_topics()
-
-    query = show_enter_search_query()
-    if query == 'm':
-        display_title_bar()
-    else:
-        search_system = SearchSystem(query, topic_articles)
-        text = search_system.search_article()
-
-
 diff_articles = [
-    '.\data\diff_texts\\moon_en.txt',
-    '.\data\diff_texts\\moon_ru.txt',
-    '.\data\diff_texts\\gymnastics_en.txt',
-    '.\data\diff_texts\\gymnastics_ru.txt',
-    '.\data\diff_texts\\female_nutrition_en.txt',
-    '.\data\diff_texts\\female_nutrition_ru.txt'
+    'moon_en.txt',
+    'moon_ru.txt',
+    'gymnastics_en.txt',
+    'gymnastics_ru.txt',
+    'female_nutrition_en.txt',
+    'female_nutrition_ru.txt',
+    'table_tennis_en.txt',
+    'table_tennis_ru.txt'
 ]
 
 topic_articles = [
@@ -122,7 +41,6 @@ topic_articles = [
     '.\data\\olympic_games\\ru\\table_tennis.txt'
 ]
 
-
 topics = [
     'astronomy',
     'healthy_lifestyle',
@@ -132,8 +50,82 @@ topics = [
 diff_texts_path = '.\data\diff_texts\\'
 
 
-def main():
+def display_title_bar():
+    print("\n**********************************************")
+    print("***************** Zipf Laws ******************")
+    print("**********************************************")
 
+
+def quit():
+    print("\nThanks for your work!")
+
+
+def get_user_choice():
+    print("[1] Find article key words.")
+    print("[2] Search article by query.")
+    print("[q] Quit.")
+    return input("Enter: ")
+
+
+def show_available_articles():
+    print("\nAvailable articles:")
+    i = 0
+    for text in diff_articles:
+        i += 1
+        print("[" + str(i) + "] " + text)
+    print("[m] Menu")
+    return input("Enter: ")
+
+
+def show_available_topics():
+    print("\nAvailable topics: {}". format(', '.join(topics)))
+
+
+def show_enter_search_query():
+    return input("Enter search query ([m] Menu): ")
+
+
+def draw_graphic(x_vector, y_vector):
+    pyplot.plot(x_vector, y_vector)
+    pyplot.show()
+
+
+def find_key_words():
+    article = show_available_articles()
+    if article != 'm':
+        file_path = diff_texts_path + diff_articles[int(article)-1]
+        print("File path: " + file_path)
+        file_text = TextHelper.get_text(file_path)
+
+        first_law = FirstLaw(file_text)
+        first_law.calc_parameters()
+        info = first_law.get_graph_info()
+        draw_graphic(info[0], info[1])
+
+        second_low = SecondLaw(file_text)
+        second_low.calc_parameters()
+        info = second_low.get_graph_info()
+        draw_graphic(info[0], info[1])
+
+        print('\n>> Weights Method <<')
+        diff_articles_path = list(map(lambda x: diff_texts_path + x, diff_articles))
+        directory_texts = TextHelper.get_texts(diff_articles_path)
+        weights_method = WeightsMethod(directory_texts, 0.8)
+        key_words = weights_method.get_key_words(True)
+        print("Key words: {}".format(key_words[int(article) - 1]))
+
+
+def search_article():
+    show_available_topics()
+
+    query = show_enter_search_query()
+    if query != 'm':
+        search_system = SearchSystem(query, topic_articles)
+        text = search_system.search_article()
+
+
+def main():
+    os.system('cls')
     choice = ''
 
     while choice != 'q':
